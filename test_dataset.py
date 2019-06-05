@@ -65,7 +65,7 @@ class TestDataset(unittest.TestCase):
         set = Dataset('organizations.csv')
         df_array = set.create_hundred_entity_chunks()
 
-        self.assertEqual(num_dfs, )
+        self.assertEqual(num_dfs,len(df_array))
 
     def test_to_json(self, json_fields):
         pass

@@ -1,3 +1,5 @@
+import math
+
 import pandas as pd
 import numpy as np
 
@@ -25,18 +27,15 @@ class Dataset(object):
         self.df = dataframe
 
     def create_hundred_entity_chunks(self):
+        num_full_dfs = math.floor(len(self.df)/100)
+        dfs = []
+        print(len(self.df))
+        for i in range(num_full_dfs):
+            dfs.append(pd.DataFrame(self.df.iloc[:(i+1)*100,:]))
+            self.df = self.df.iloc[(i+1)*100,:]
+            print(len(self.df))
 
-        df_array = []
-        i=0
-        count = 0
-
-        while i<len(self.df):
-            df_array[count] = self.df.iloc[:,:i+99]
-
-            i = i+100
-            count = count + 1
-        return df_array
-
+        return dfs
     def to_json(self):
         pass
 
