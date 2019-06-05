@@ -68,12 +68,20 @@ class TestDataset(unittest.TestCase):
         self.assertEqual(num_dfs,len(df_array))
 
     def test_create_hundred_entity_chunks_bigger_sets(self):
-        self.assertEqual(1,1)
+        df = pd.read_csv('tickets.csv')
+        num_dfs = math.ceil(len(df.index) / 100)
 
-    def test_to_json(self, json_fields):
+        set = Dataset('tickets.csv')
+        df_array = set.create_hundred_entity_chunks()
+
+        self.assertEqual(num_dfs, len(df_array))
+
+    def test_to_json_for_orgs(self):
+
         pass
 
-    def test_upload(self, upload_address):
+
+    def test_upload(self):
         pass
 
 

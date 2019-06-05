@@ -1,0 +1,16 @@
+class ZendeskConnector:
+    def __init__(self):
+        pass
+
+    def get(self):
+        pass
+
+    def update(self):
+        pass
+
+    def create(self):
+        pass
+
+    def create_many(self):
+        pass
+

@@ -35,7 +35,18 @@ class Dataset(object):
         dfs.append(pd.DataFrame(self.df.iloc[(i+1)*100:]))
         return dfs
 
-    def to_json(self):
+    def delete_identical_entries(self):
+       pass
+
+    def merge_similar_entries(self):
+        pass
+
+    def is_it_similar_enough(self):
+        pass
+
+    def to_json(self, identifier):
+        if identifier == 'organization':
+            print('got here!')
         pass
 
     def upload(self):
