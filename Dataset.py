@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 
 class Dataset(object):
 
@@ -24,7 +25,17 @@ class Dataset(object):
         self.df = dataframe
 
     def create_hundred_entity_chunks(self):
-        pass
+
+        df_array = []
+        i=0
+        count = 0
+
+        while i<len(self.df):
+            df_array[count] = self.df.iloc[:,:i+99]
+
+            i = i+100
+            count = count + 1
+        return df_array
 
     def to_json(self):
         pass
