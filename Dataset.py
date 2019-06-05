@@ -15,11 +15,16 @@ class Dataset(object):
             print('Wrong file or file path!')
             self.df = ""
 
-        self.clean_data()
+        #self.clean_data()
 
 
     def clean_data(self):
-        pass
+        self.df = self.df.fillna("")
+        self.df = self.df.replace({r'[^\x00-\x7F]+': ''}, regex=True, inplace=True)
+
+        if 'name' in self.df.columns:
+            self.df = self.df['name'].str.replace(' - CE', '', regex=True)
+
 
 
     def get_dataframe(self):
@@ -48,14 +53,19 @@ class Dataset(object):
 
     def to_json_format(self, df_entry, dataset):
         if dataset == 'organization':
-            data = {"name":df_entry[0], "domain_names":df_entry[1],
-                                "details":df_entry[2], "notes":df_entry[3],
-                                "organization_fields": {"region":df_entry[4]}, "tags":df_entry[5]}
-
-
+            data = {"name":df_entry[0], "domain_names":df_entry[1], "details":df_entry[2], "notes":df_entry[3], "tags":df_entry[5], "organization_fields":{"region": df_entry[4]}}
+            if self.custom_field_is_null(df_entry[4]):
+                del data["organization_fields"]
 
             return data
         return ""
+
+    def custom_field_is_null(self,string):
+        if string == "":
+            return True
+
+        return False
+
 
     def upload(self):
         pass

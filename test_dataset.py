@@ -39,29 +39,14 @@ class TestDataset(unittest.TestCase):
     def test_clean_data_base_case(self):
         pass
 
-    def test_clean_data_for_emails(self):
-        pass
-
     def test_clean_data_when_name_is_number(self):
         pass
 
-    def test_clean_data_when_name_is_visitor(self):
-        pass
     def if_name_is_just_a_number_flag_it(self):
         pass
 
     def remove_non_ascii_symbols_during_cleaning(self):
         pass
-
-    def remove_parentheses(self):
-        pass
-
-    def remove_quotes(self):
-        pass
-
-    def remove_brackets(self):
-        pass
-
 
     def test_replace_dataframe(self):
         set = Dataset('organizations.csv')
@@ -88,9 +73,7 @@ class TestDataset(unittest.TestCase):
         self.assertEqual(num_dfs, len(df_array))
 
     def test_to_json_format_for_orgs(self):
-        string_should_be = {"name": "1,000 Bulbs","domain_names":["1000bulbs.com"],
-                                             "details": "","notes":"",
-                                             "organization_fields":{"region":"apac"},"tags":['']}
+        string_should_be = {"name": "1,000 Bulbs", "domain_names": ['1000bulbs.com'], "details": "", "notes": "", "organization_fields":{"region": "apac"}, "tags": ['']}
         #there is an intentional mismatch between "tags":[''] and "tags":[""] to ensure they would still mean the same
         #value
 
@@ -99,7 +82,31 @@ class TestDataset(unittest.TestCase):
 
         self.assertEqual(string_is, string_should_be)
 
+    def test_to_json_format_for_orgs_with_multiple_array_values(self):
+        string_should_be = {"name": "1,000 Bulbs", "domain_names": ['1000bulbs.com', 'protonmail.com'], "details": "", "notes": "", "tags": ['vip'], "organization_fields":{"region": "apac"}}
 
+        val = ["1,000 Bulbs", ['1000bulbs.com','protonmail.com'], "", "", "apac", ['vip']]
+
+        string_is = self.orgs.to_json_format(val, 'organization')
+        self.assertEqual(string_is,string_should_be)
+
+    def test_to_json_format_orgs_with_no_org_fields(self):
+        string_should_be = {"name": "1,000 Bulbs", "domain_names": ['1000bulbs.com', 'protonmail.com'], "details": "", "notes": "", "tags": ['vip']}
+
+
+        val = ["1,000 Bulbs", ['1000bulbs.com', 'protonmail.com'], "", "", "", ['vip']]
+
+        string_is = self.orgs.to_json_format(val, 'organization')
+
+        self.assertEqual(string_is, string_should_be)
+
+
+    def test_to_json_format_users(self):
+        pass
+
+    def test_to_json_format_tickets(self):
+        pass
+    
 
     def test_upload(self):
         pass
