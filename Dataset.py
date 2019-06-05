@@ -29,13 +29,12 @@ class Dataset(object):
     def create_hundred_entity_chunks(self):
         num_full_dfs = math.floor(len(self.df)/100)
         dfs = []
-        print(len(self.df))
         for i in range(num_full_dfs):
             dfs.append(pd.DataFrame(self.df.iloc[:(i+1)*100,:]))
-            self.df = self.df.iloc[(i+1)*100,:]
-            print(len(self.df))
 
+        dfs.append(pd.DataFrame(self.df.iloc[(i+1)*100:]))
         return dfs
+
     def to_json(self):
         pass
 

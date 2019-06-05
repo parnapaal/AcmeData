@@ -58,7 +58,7 @@ class TestDataset(unittest.TestCase):
 
         self.assertEqual(df.size, set.df.size, msg='our dfs need to be the same size')
 
-    def test_create_hundred_entity_chunks(self):
+    def test_create_hundred_entity_chunks_base(self):
         df = pd.read_csv('organizations.csv')
         num_dfs = math.ceil(len(df.index)/100)
 
@@ -66,6 +66,9 @@ class TestDataset(unittest.TestCase):
         df_array = set.create_hundred_entity_chunks()
 
         self.assertEqual(num_dfs,len(df_array))
+
+    def test_create_hundred_entity_chunks_bigger_sets(self):
+        self.assertEqual(1,1)
 
     def test_to_json(self, json_fields):
         pass
