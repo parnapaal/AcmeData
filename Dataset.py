@@ -5,6 +5,8 @@ import numpy as np
 
 class Dataset(object):
 
+    dict = ['']
+
     def __init__(self, fileName):
         self.fileName = fileName
         try:
@@ -44,10 +46,16 @@ class Dataset(object):
     def is_it_similar_enough(self):
         pass
 
-    def to_json(self, identifier):
-        if identifier == 'organization':
-            print('got here!')
-        pass
+    def to_json_format(self, df_entry, dataset):
+        if dataset == 'organization':
+            data = {"name":df_entry[0], "domain_names":df_entry[1],
+                                "details":df_entry[2], "notes":df_entry[3],
+                                "organization_fields": {"region":df_entry[4]}, "tags":df_entry[5]}
+
+
+
+            return data
+        return ""
 
     def upload(self):
         pass

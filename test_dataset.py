@@ -9,19 +9,32 @@ from AcmeData.Dataset import Dataset
 
 class TestDataset(unittest.TestCase):
 
+    def setUp(self):
+        self.orgs = Dataset('organizations.csv')
+        self.users = Dataset('users.csv')
+        self.tickets = Dataset('tickets.csv')
+
+    def tearDown(self):
+        self.orgs = None
+        self.users = None
+        self.tickets = None
+
+
+
     def test_open_file_base_case(self):
         #confirm the datasets are being loaded in correctly through pandas by checking the size
-        set = Dataset('organizations.csv')
+
         df = pd.read_csv('organizations.csv')
 
-        self.assertEqual(set.df.size,df.size)
+        self.assertEqual(self.orgs.df.size, df.size)
 
     def test_if_file_not_found_throw_exception(self):
 
         organization = 'organization.csv'
         set = Dataset(organization)
 
-        self.assertEqual(set.df,"")
+
+        self.assertTrue(set.df == "")
 
     def test_clean_data_base_case(self):
         pass
@@ -51,34 +64,41 @@ class TestDataset(unittest.TestCase):
 
 
     def test_replace_dataframe(self):
-        df = pd.read_csv('users.csv')
         set = Dataset('organizations.csv')
 
-        set.replace_dataframe(df)
+        set.replace_dataframe(self.users.df)
 
-        self.assertEqual(df.size, set.df.size, msg='our dfs need to be the same size')
+        self.assertEqual(self.users.df.size, set.df.size, msg='our dfs need to be the same size')
 
     def test_create_hundred_entity_chunks_base(self):
         df = pd.read_csv('organizations.csv')
         num_dfs = math.ceil(len(df.index)/100)
 
-        set = Dataset('organizations.csv')
-        df_array = set.create_hundred_entity_chunks()
+        df_array = self.orgs.create_hundred_entity_chunks()
 
         self.assertEqual(num_dfs,len(df_array))
 
     def test_create_hundred_entity_chunks_bigger_sets(self):
+
         df = pd.read_csv('tickets.csv')
         num_dfs = math.ceil(len(df.index) / 100)
 
-        set = Dataset('tickets.csv')
-        df_array = set.create_hundred_entity_chunks()
+        df_array = self.tickets.create_hundred_entity_chunks()
 
         self.assertEqual(num_dfs, len(df_array))
 
-    def test_to_json_for_orgs(self):
+    def test_to_json_format_for_orgs(self):
+        string_should_be = {"name": "1,000 Bulbs","domain_names":["1000bulbs.com"],
+                                             "details": "","notes":"",
+                                             "organization_fields":{"region":"apac"},"tags":['']}
+        #there is an intentional mismatch between "tags":[''] and "tags":[""] to ensure they would still mean the same
+        #value
 
-        pass
+        val = ["1,000 Bulbs", ["1000bulbs.com"], "", "", "apac", [""]]
+        string_is = self.orgs.to_json_format(val, 'organization')
+
+        self.assertEqual(string_is, string_should_be)
+
 
 
     def test_upload(self):
