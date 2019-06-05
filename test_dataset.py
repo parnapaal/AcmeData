@@ -102,11 +102,33 @@ class TestDataset(unittest.TestCase):
 
 
     def test_to_json_format_users(self):
-        pass
+        string_should_be = {
+      "name": "Jennifer Hansen",
+      "email": "jhansen@example.com",
+      "organization_id": 366775269013,
+      "role": "admin",
+      "tags": [''],
+      "active": "true",
+      "shared": "false",
+      "shared_agent": "false",
+      "notes": '',
+      "default_group_id": 360004465953,
+      "user_fields": {
+          "employee_id":"",
+          "promotion_code": "doloratdoloremque",
+          "subscription": "plan_gold",
+      }}
+        val = ["Jennifer Hansen", "jhansen@example.com", 366775269013, "admin",[''], "true", "false", "false", '',
+               360004465953, '', "doloratdoloremque", "plan_gold"]
+
+        string_is = self.users.to_json_format(val,'users')
+
+
+        self.assertEqual(string_is, string_should_be)
 
     def test_to_json_format_tickets(self):
         pass
-    
+
 
     def test_upload(self):
         pass

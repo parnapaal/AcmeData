@@ -56,7 +56,25 @@ class Dataset(object):
             data = {"name":df_entry[0], "domain_names":df_entry[1], "details":df_entry[2], "notes":df_entry[3], "tags":df_entry[5], "organization_fields":{"region": df_entry[4]}}
             if self.custom_field_is_null(df_entry[4]):
                 del data["organization_fields"]
+            return data
 
+        if dataset == 'users':
+            data= {
+                "name": df_entry[0],
+                "email":df_entry[1],
+                "organization_id": df_entry[2],
+                "role": df_entry[3],
+                "tags": df_entry[4],
+                "active": df_entry[5],
+                "shared": df_entry[6],
+                "shared_agent": df_entry[7],
+                "notes": df_entry[8],
+                "default_group_id": df_entry[9],
+                "user_fields": {
+                    "employee_id": df_entry[10],
+                    "promotion_code": df_entry[11],
+                    "subscription": df_entry[12]
+                }}
             return data
         return ""
 
