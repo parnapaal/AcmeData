@@ -19,16 +19,30 @@ class Dataset(object):
             print('Wrong file or file path!')
             self.df = ""
 
-        #self.clean_data()
-
 #clean our data of non-ascii characters. If our column is called 'name', take out the '- CE' it shouldn't be here
     def clean_data(self):
-        self.df = self.df.fillna("")
-        self.df = self.df.replace({r'[^\x00-\x7F]+': ''}, regex=True, inplace=True)
+        #print(self.df)
 
-        if 'name' in self.df.columns:
-            self.df = self.df['name'].str.replace(' - CE', '', regex=True)
+        #self.df = self.df.fillna("")
+        #remove non-ascii's
+        #self.df = self.df.replace({r'[^\x00-\x7F]+': ''}, regex=True, inplace=True
 
+        #names = list(self.df)
+        #trythis = self.df['domain_names'].str.replace("['()]", "")
+        #print(trythis)
+        #print(names)
+        #if 'name' in list(self.df):
+         #   self.df = self.df['name'].str.replace(' - CE', '', regex=True)
+
+        if 'domain_names' in self.df.columns:
+            print(self.df)
+            #new_col = self.df['domain_names'].str.replace("['()]", "")
+
+            #there is definitely a better way to do this -- come back here if you think of it - write this into commit
+            self.df['domain_names'] = self.df['domain_names'].str.replace("['[()]", "").values
+            self.df['domain_names'] = self.df['domain_names'].str.replace("[]]", "").values
+            print(self.df['domain_names'])
+            print('got here')
 
 #return our self.dataframe
     def get_dataframe(self):
