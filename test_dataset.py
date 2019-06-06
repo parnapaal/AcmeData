@@ -36,20 +36,23 @@ class TestDataset(unittest.TestCase):
 
         self.assertTrue(set.df == "")
 
-    # base case for cleaning our dataframe entries of ascii characters, NaNs and extra wordage in the name column
+    # base case for cleaning our dataframe entries of ascii characters, NaNs and extra wordage in the name column --
+    #clean data happens on instantiation so we do not need to call clean_data for the test methods of this class -- we
+    #are just asserting that they happened correctly
     def test_clean_data_base_case(self):
         pass
 
     def test_clean_org_data(self):
-        self.orgs.clean_data()
-        #self.orgs.clean_data()
+        domain_col_at_zero = self.orgs.df['domain_names'].tolist()[0]
 
+        self.assertEqual('1000bulbs.com, protonmail.com', domain_col_at_zero)
 
     def test_clean_data_when_name_is_number(self):
         pass
 
-    def if_name_is_just_a_number_flag_it(self):
-        pass
+    def test_if_name_is_just_a_number_flag_it(self):
+
+        self.assertEqual('360041750613_flagged_for_inspection', self.orgs.df.iloc[4,1])
 
     def remove_non_ascii_symbols_during_cleaning(self):
         pass
@@ -60,6 +63,9 @@ class TestDataset(unittest.TestCase):
 
         set.replace_dataframe(self.users.df)
 
-        self.assertEqual(self.users.df.size, set.df.size, msg='our dfs need to be the same size')
+        self.assertEqual(self.users.df.size, set.df.size)
+
+    def test_df_to_xlsx(self):
+        self.orgs.df_to_xlsx('test2')
 
 

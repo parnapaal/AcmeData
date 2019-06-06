@@ -15,6 +15,7 @@ class Dataset(object):
         self.fileName = fileName
         try:
             self.df = pd.read_csv(fileName)
+            self.clean_data()
         except FileNotFoundError:
             print('Wrong file or file path!')
             self.df = ""
@@ -35,14 +36,19 @@ class Dataset(object):
          #   self.df = self.df['name'].str.replace(' - CE', '', regex=True)
 
         if 'domain_names' in self.df.columns:
-            print(self.df)
-            #new_col = self.df['domain_names'].str.replace("['()]", "")
-
             #there is definitely a better way to do this -- come back here if you think of it - write this into commit
             self.df['domain_names'] = self.df['domain_names'].str.replace("['[()]", "").values
             self.df['domain_names'] = self.df['domain_names'].str.replace("[]]", "").values
-            print(self.df['domain_names'])
-            print('got here')
+
+        if 'name' in self.df.columns:
+            names = self.df['name']
+            is_number = names.str.isnumeric()
+            true_here = is_number[is_number].index
+            for ind in true_here:
+                val = self.df.iloc[ind, 1]
+                val = str(val) + '_flagged_for_inspection'
+                self.df.iloc[ind, 1] = val
+
 
 #return our self.dataframe
     def get_dataframe(self):
@@ -64,6 +70,8 @@ class Dataset(object):
     def is_it_similar_enough(self):
         pass
 
-
+    def df_to_xlsx(self, string):
+        string = string + '.xlsx'
+        return self.df.to_excel(string, index=False)
 
 
