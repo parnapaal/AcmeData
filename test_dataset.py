@@ -52,11 +52,16 @@ class TestDataset(unittest.TestCase):
 
     def test_if_name_is_just_a_number_flag_it(self):
 
-        self.assertEqual('360041750613_flagged_for_inspection', self.orgs.df.iloc[4,1])
+        self.assertEqual('123456789_flagged_for_inspection - aparna', self.orgs.df.iloc[4,1])
 
     def remove_non_ascii_symbols_during_cleaning(self):
         pass
 
+
+    def test_add_aparna(self):
+
+
+        pass
     # replace our dataframe within our instance with a new dataframe
     def test_replace_dataframe(self):
         set = Dataset('organizations.csv')

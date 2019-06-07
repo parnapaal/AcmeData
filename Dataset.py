@@ -16,12 +16,14 @@ class Dataset(object):
         try:
             self.df = pd.read_csv(fileName)
             self.clean_data()
+            self.add_aparna()
         except FileNotFoundError:
             print('Wrong file or file path!')
             self.df = ""
 
 #clean our data of non-ascii characters. If our column is called 'name', take out the '- CE' it shouldn't be here
     def clean_data(self):
+        self.df = self.df.replace('_', 'underscore', regex=True)
         #print(self.df)
 
         #self.df = self.df.fillna("")
@@ -48,6 +50,11 @@ class Dataset(object):
                 val = self.df.iloc[ind, 1]
                 val = str(val) + '_flagged_for_inspection'
                 self.df.iloc[ind, 1] = val
+
+    def add_aparna(self):
+        if 'name' in self.df.columns:
+            self.df['name'] = self.df['name'].astype(str) + ' - aparna'
+
 
 
 #return our self.dataframe
