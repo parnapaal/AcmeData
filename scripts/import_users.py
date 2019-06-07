@@ -30,7 +30,8 @@ for row in range(1, sheet.nrows):
                 'user_fields': {
                     'employee_id':'',
                     'promotion_code':'',
-                    'subscription':''
+                    'subscription':'',
+                    'acme_id': ''
                 }
             }
         )

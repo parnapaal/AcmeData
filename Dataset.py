@@ -51,9 +51,15 @@ class Dataset(object):
                 val = str(val) + '_flagged_for_inspection'
                 self.df.iloc[ind, 1] = val
 
+            self.df['name'] = self.df['name'].str.replace('[^\w\s#@/:%.,_-]', '')
+
+        if 'notes' in self.df.columns:
+            self.df['notes'] = self.df['notes'].str.replace('[^\w\s#@/:%.,_-]', '')
+
     def add_aparna(self):
         if 'name' in self.df.columns:
             self.df['name'] = self.df['name'].astype(str) + ' - aparna'
+
 
 
 
