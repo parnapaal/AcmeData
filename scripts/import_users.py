@@ -19,7 +19,19 @@ for row in range(1, sheet.nrows):
             {
                 'name': sheet.row_values(row)[2],
                 'email': sheet.row_values(row)[3],
-                'user_fields': {'member_level': sheet.row_values(row)[7]}
+                'organization_id':'',
+                'role':'',
+                'tags':[],
+                'shared':'',
+                'shared_agent':'',
+                'details':'',
+                'notes':'',
+                'restricted_agent':'',
+                'user_fields': {
+                    'employee_id':'',
+                    'promotion_code':'',
+                    'subscription':''
+                }
             }
         )
 
