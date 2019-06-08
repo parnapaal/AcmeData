@@ -24,18 +24,8 @@ class Dataset(object):
 #clean our data of non-ascii characters. If our column is called 'name', take out the '- CE' it shouldn't be here
     def clean_data(self):
         self.df = self.df.replace('_', 'underscore', regex=True)
-        #print(self.df)
 
-        #self.df = self.df.fillna("")
-        #remove non-ascii's
-        #self.df = self.df.replace({r'[^\x00-\x7F]+': ''}, regex=True, inplace=True
-
-        #names = list(self.df)
-        #trythis = self.df['domain_names'].str.replace("['()]", "")
-        #print(trythis)
-        #print(names)
-        #if 'name' in list(self.df):
-         #   self.df = self.df['name'].str.replace(' - CE', '', regex=True)
+        #TODO: replace nans
 
         if 'domain_names' in self.df.columns:
             #there is definitely a better way to do this -- come back here if you think of it - write this into commit
@@ -54,8 +44,7 @@ class Dataset(object):
             self.df['name'] = self.df['name'].str.replace('[^\w\s#@/:%.,_-]', '')
 
     def add_aparna(self):
-        self.df['tags'] = self.df['tags'].replace(']',',aparna]')
-        print(self.df['tags'])
+        pass
 
 #return our self.dataframe
     def get_dataframe(self):

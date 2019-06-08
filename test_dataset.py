@@ -77,14 +77,20 @@ class TestDataset(unittest.TestCase):
     # replace our dataframe within our instance with a new dataframe
     #
     def test_flagged_as_aparna(self):
-        testing = self.users.df['tags'][10]
-        print(testing)
-        test = testing[-1]
-        #self.assertEqual(test, 'aparna')
+        tags = self.users.df['tags']
 
+        for tag in tags:
+            try :
+                if ',' in tag:
+                    print('something is wrong')
+                else:
+                    tag = tag.replace(']','aparna]')
+
+            except:
+                print('something is wrong')
+                print(tag.type)
     def test_tags_are_stored_as_arrays(self):
         testing = self.orgs.df['tags'][10]
-        #print(testing)
 
     def that_if_the_first_tag_value_is_null_it_is_removed(self):
         list_of_tags = self.orgs.df['tags']
