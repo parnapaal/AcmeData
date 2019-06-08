@@ -80,15 +80,17 @@ class TestDataset(unittest.TestCase):
         tags = self.users.df['tags']
 
         for tag in tags:
-            try :
-                if ',' in tag:
-                    print('something is wrong')
-                else:
-                    tag = tag.replace(']','aparna]')
+            try:
+                if tag == '[]':
+                    tag = "'aparna'"
 
+                else:
+                    tag = tag.replace(']', ",'aparna'")
+                    tag = tag.replace('[', '')
             except:
                 print('something is wrong')
-                print(tag.type)
+            print(tag)
+
     def test_tags_are_stored_as_arrays(self):
         testing = self.orgs.df['tags'][10]
 

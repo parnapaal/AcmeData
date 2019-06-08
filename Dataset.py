@@ -24,6 +24,7 @@ class Dataset(object):
 #clean our data of non-ascii characters. If our column is called 'name', take out the '- CE' it shouldn't be here
     def clean_data(self):
         self.df = self.df.replace('_', 'underscore', regex=True)
+        self.df = self.df.fillna('')
 
         #TODO: replace nans
 
