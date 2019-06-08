@@ -15,8 +15,8 @@ class Dataset(object):
         self.fileName = fileName
         try:
             self.df = pd.read_csv(fileName)
-            self.clean_data()
             self.add_aparna()
+            self.clean_data()
         except FileNotFoundError:
             print('Wrong file or file path!')
             self.df = ""
@@ -53,15 +53,9 @@ class Dataset(object):
 
             self.df['name'] = self.df['name'].str.replace('[^\w\s#@/:%.,_-]', '')
 
-        if 'notes' in self.df.columns:
-            self.df['notes'] = self.df['notes'].str.replace('[^\w\s#@/:%.,_-]', '')
-
     def add_aparna(self):
-        if 'name' in self.df.columns:
-            self.df['name'] = self.df['name'].astype(str) + ' - aparna'
-
-
-
+        self.df['tags'] = self.df['tags'].replace(']',',aparna]')
+        print(self.df['tags'])
 
 #return our self.dataframe
     def get_dataframe(self):
@@ -78,7 +72,7 @@ class Dataset(object):
 #if entries are the same through name, email, and organization, and group, merge them
     def merge_similar_entries(self):
         result = pd.concat(g for _, g in self.df.groupby("email") if len(g) > 1)
-        print(result)
+        #print(result)
 
 #check to see if two entries are similar enough to merge
     def is_it_similar_enough(self):

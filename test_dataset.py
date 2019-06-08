@@ -53,9 +53,13 @@ class TestDataset(unittest.TestCase):
 
     def test_if_name_is_just_a_number_flag_it(self):
 
-        self.assertEqual('123456789_flagged_for_inspection - aparna', self.orgs.df.iloc[4,1])
+        self.assertEqual('123456789_flagged_for_inspection', self.orgs.df.iloc[4,1])
 
     def remove_non_ascii_symbols_during_cleaning(self):
+        pass
+
+    def test_find_similar_emails(self):
+        result = pd.concat(g for _, g in self.users.df.groupby("email") if len(g) > 1)
         pass
 
     def test_merging_similar_entries(self):
@@ -64,11 +68,37 @@ class TestDataset(unittest.TestCase):
         find_this = result['email'].iloc[0]
 
         similar_entries = self.users.df.loc[self.users.df['email'] == find_this ]
+        #print(similar_entries)
+        #print(self.orgs.df)
 
             #if result[result['email'] == find_this_val]:
                 #print('gotit')
             #print(match)
     # replace our dataframe within our instance with a new dataframe
+    #
+    def test_flagged_as_aparna(self):
+        testing = self.users.df['tags'][10]
+        print(testing)
+        test = testing[-1]
+        #self.assertEqual(test, 'aparna')
+
+    def test_tags_are_stored_as_arrays(self):
+        testing = self.orgs.df['tags'][10]
+        #print(testing)
+
+    def that_if_the_first_tag_value_is_null_it_is_removed(self):
+        list_of_tags = self.orgs.df['tags']
+        count = 0
+        for tag in list_of_tags:
+            if tag[0] == '':
+                tags = tag.pop(0)
+                count = count + 1
+            #print(index)
+        pass
+
+    def test_merging_visitors(self):
+        pass
+
     def test_replace_dataframe(self):
         set = Dataset('organizations.csv')
 
