@@ -7,7 +7,7 @@ import pandas as pd
 url = 'https://z3nplatformdevap.zendesk.com/api/v2/organizations.json'
 
 user = 'aparna.pal.1994@gmail.com'
-pwd = 'Ferrar1_'
+pwd = ''
 
 names = []
 ids = []

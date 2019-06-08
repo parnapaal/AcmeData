@@ -5,12 +5,12 @@ import requests
 
 session = requests.Session()
 session.headers = {'Content-Type': 'application/json'}
-session.auth = 'aparna.pal.1994@gmail.com', 'Ferrar1_'
+session.auth = 'aparna.pal.1994@gmail.com', ''
 url = 'https://z3nplatformdevap.zendesk.com/api/v2/users/create_many.json'
 
 payloads = []
 users_dict = {'users': []}
-book = xlrd.open_workbook('users_list.xlsx')
+book = xlrd.open_workbook('scripts/users_list.xlsx')
 sheet = book.sheet_by_name('Sheet1')
 
 for row in range(1, sheet.nrows):
@@ -19,20 +19,20 @@ for row in range(1, sheet.nrows):
             {
                 'name': sheet.row_values(row)[2],
                 'email': sheet.row_values(row)[3],
-                'organization_id':'',
-                'role':'',
-                'tags':[],
-                'shared':'',
-                'shared_agent':'',
-                'details':'',
-                'notes':'',
-                'restricted_agent':'',
-                'user_fields': {
-                    'employee_id':'',
-                    'promotion_code':'',
-                    'subscription':'',
-                    'acme_id': ''
-                }
+                #'organization_id':'',
+                #'role':'',
+                #'tags':[],
+                #'shared':'',
+                #'shared_agent':'',
+                #'details':'',
+               # 'notes':'',
+               # 'restricted_agent':'',
+               # 'user_fields': {
+                #    'employee_id':'',
+                 #   'promotion_code':'',
+                  #  'subscription':'',
+                   # 'acme_id': ''
+               # }
             }
         )
 

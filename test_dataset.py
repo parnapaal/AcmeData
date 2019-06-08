@@ -42,6 +42,7 @@ class TestDataset(unittest.TestCase):
     def test_clean_data_base_case(self):
         pass
 
+
     def test_clean_org_data(self):
         domain_col_at_zero = self.orgs.df['domain_names'].tolist()[0]
 
@@ -57,11 +58,16 @@ class TestDataset(unittest.TestCase):
     def remove_non_ascii_symbols_during_cleaning(self):
         pass
 
+    def test_merging_similar_entries(self):
+        result = pd.concat(g for _, g in self.users.df.groupby("email") if len(g) > 1)
+        #print(result['name'] + result['email'])
+        find_this = result['email'].iloc[0]
 
-    def test_add_aparna(self):
+        similar_entries = self.users.df.loc[self.users.df['email'] == find_this ]
 
-
-        pass
+            #if result[result['email'] == find_this_val]:
+                #print('gotit')
+            #print(match)
     # replace our dataframe within our instance with a new dataframe
     def test_replace_dataframe(self):
         set = Dataset('organizations.csv')

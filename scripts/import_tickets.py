@@ -5,7 +5,7 @@ import requests
 
 session = requests.Session()
 session.headers = {'Content-Type': 'application/json'}
-session.auth = 'aparna.pal.1994@gmail.com', 'Ferrar1_'
+session.auth = 'aparna.pal.1994@gmail.com', ''
 url = 'https://z3nplatformdevap.zendesk.com/api/v2/imports/tickets/create_many.json'
 
 

@@ -5,7 +5,7 @@ import requests
 # Set the request parameters
 url = 'https://z3nplatformdevap.zendesk.com/api/v2/user_fields.json'
 user = 'aparna.pal.1994@gmail.com'
-pwd = 'Ferrar1_'
+pwd = ''
 headers = {'content-type': 'application/json'}
 
 #data = {

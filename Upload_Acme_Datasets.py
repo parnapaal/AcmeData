@@ -67,6 +67,8 @@ if __name__ == '__main__':
     orgs = Dataset('csv_data/organizations.csv')
     orgs.df_to_xlsx('scripts/org_list')
 
+    # os.system('python scripts/import_orgs.py')
+
     path = os.path.join(__location__, 'csv_data/users.csv')
     users = Dataset(path)
 
@@ -80,12 +82,12 @@ if __name__ == '__main__':
 
     combined = update_user_org_ids(org_ids, orgs_and_names)
     users.replace_dataframe(combined)
-    users.df.to_excel('checking.xlsx')
+    users.df = users.df.drop_duplicates(subset=['name'])
+    users.df.to_excel('scripts/users_list.xlsx')
+
+    #os.system('python scripts/import_users.py')
 
 
-
-
-    #os.system('python scripts/import_orgs.py')
 
 #    path = set_path('scripts/add_custom_user_field.py')
 #   os.system('python ' + path)

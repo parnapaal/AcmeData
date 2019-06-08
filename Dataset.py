@@ -73,11 +73,12 @@ class Dataset(object):
 
 #if entries are the exact same, delete one
     def delete_identical_entries(self):
-       pass
+        self.df = self.df.drop_duplicates(subset=['name','email'])
 
 #if entries are the same through name, email, and organization, and group, merge them
     def merge_similar_entries(self):
-        pass
+        result = pd.concat(g for _, g in self.df.groupby("email") if len(g) > 1)
+        print(result)
 
 #check to see if two entries are similar enough to merge
     def is_it_similar_enough(self):
