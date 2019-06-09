@@ -75,7 +75,7 @@ class TestDataset(unittest.TestCase):
                 #print('gotit')
             #print(match)
     # replace our dataframe within our instance with a new dataframe
-    
+
     #flag_aparna() is called on instantiation - we are just checking that the tag is in place
     def test_flagged_as_aparna(self):
         self.assertEqual(self.users.df['tags'][0], 'aparna')
@@ -94,7 +94,40 @@ class TestDataset(unittest.TestCase):
         pass
 
     def test_merging_visitors(self):
-        pass
+        result = pd.concat(g for _, g in self.users.df.groupby("email") if len(g) > 1)
+
+
+    def test_is_it_similar_enough(self):
+        result = pd.concat(g for _, g in self.users.df.groupby("email") if len(g) > 1)
+        result_emails = list(set(self.users.df['email']))
+        similar_entries = []
+        for email in result_emails:
+            result_for_this_email = result.loc[result['email'] == email]
+            df = result.groupby('email').agg({'email': 'first',
+                                          'name': ', '.join,
+                                          'role': ', '.join,
+                                          'active': 'first',
+                                          'api_subscription': ', '.join,
+                                          'promotion_code': ', '.join,
+                                          'role': ', '.join,
+                                          'organization_id': ', '.join
+                                              }).reset_index(drop=True)
+
+        for i, row in df.iterrows():
+            names = row['name'].split(',')
+            same_names = all(elem.strip() == names[0] for elem in names)
+
+            if same_names:
+                df.loc[df['name'] == row['name'], 'name'] = names[0]
+
+            similar_entries.append(df)
+
+        def test_picking_merge_features():
+            #pick a role
+
+            #pick a subscription
+            pass
+
 
     def test_replace_dataframe(self):
         set = Dataset('organizations.csv')

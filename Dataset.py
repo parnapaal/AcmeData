@@ -26,8 +26,6 @@ class Dataset(object):
         self.df = self.df.replace('_', 'underscore', regex=True)
         self.df = self.df.fillna('')
 
-        #TODO: replace nans
-
         if 'domain_names' in self.df.columns:
             #there is definitely a better way to do this -- come back here if you think of it - write this into commit
             self.df['domain_names'] = self.df['domain_names'].str.replace("['[()]", "").values
@@ -42,6 +40,7 @@ class Dataset(object):
                 val = str(val) + '_flagged_for_inspection'
                 self.df.iloc[ind, 1] = val
 
+            #self.df['name'] = self.df['name'].str.replace('[^\w\#@/:%.,_-]', '')
             self.df['name'] = self.df['name'].str.replace('[^\w\s#@/:%.,_-]', '')
 
     def add_aparna(self):
@@ -82,7 +81,6 @@ class Dataset(object):
 #if entries are the same through name, email, and organization, and group, merge them
     def merge_similar_entries(self):
         result = pd.concat(g for _, g in self.df.groupby("email") if len(g) > 1)
-        #print(result)
 
 #check to see if two entries are similar enough to merge
     def is_it_similar_enough(self):
