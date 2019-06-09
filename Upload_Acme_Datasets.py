@@ -67,7 +67,7 @@ if __name__ == '__main__':
     orgs = Dataset('csv_data/organizations.csv')
     orgs.df_to_xlsx('scripts/org_list')
 
-    # os.system('python scripts/import_orgs.py')
+    os.system('python scripts/import_orgs.py')
 
     path = os.path.join(__location__, 'csv_data/users.csv')
     users = Dataset(path)
