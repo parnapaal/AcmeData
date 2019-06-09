@@ -81,9 +81,41 @@ class Dataset(object):
         self.df = self.df.drop_duplicates(subset=['name','email'])
 
     def dealing_with_identical_emails(self):
-        df = self.users.merge_similar_entries()
-        df = self.users.pick_a_merged_role(df)
-        pass
+        df = self.merge_similar_entries()
+        df = self.pick_a_merged_subscription(df)
+        df = self.pick_a_merged_role(df)
+
+        not_flagged = df.loc[df['tags'] != 'email_flagged']['email']
+        # print(df.loc[df['tags'] == 'email_flagged'])
+
+        for email in not_flagged:
+            rows_we_need_to_update = self.result.loc[self.result['email'] == email]
+            ids_to_delete = rows_we_need_to_update['id'].to_list()
+            tags_to_add = ''
+            notes_to_add = ''
+
+            # delete the rows with shared info
+            for ids in ids_to_delete:
+                tags_to_add = rows_we_need_to_update.loc[rows_we_need_to_update['id'] == ids][
+                                  'tags'].values + ", " + tags_to_add
+                notes_to_add = rows_we_need_to_update.loc[rows_we_need_to_update['id'] == ids][
+                                   'notes'].values + ", " + notes_to_add
+
+                self.df = self.df[self.df['id'] != ids]
+
+            emp_id = rows_we_need_to_update.loc[rows_we_need_to_update['id'] == ids]['employee_id'].values
+            look_here = df.loc[df['email'] == email]
+            print(look_here)
+
+            toadd = {'id': ids_to_delete[0], 'name': look_here['name'], 'email': look_here['email'],
+                     'organization_id': look_here['organization_id'], 'role': look_here['role'],
+                     'active': look_here['active'],
+                     'notes': notes_to_add,
+                     'api_subscription': df.loc[df['email'] == email]['api_subscription'], 'employee_id': emp_id,
+                     'promotion_code': look_here['promotion_code'], 'tags': tags_to_add + look_here['tags'].values}
+
+            self.df = self.df.append(toadd, ignore_index=True)
+            return self.df
 
 #if entries are the same through name, email, and organization, and group, merge them
     def merge_similar_entries(self):
@@ -145,8 +177,7 @@ class Dataset(object):
                    df.loc[df['name'] == row['name'], 'role'] = 'end_user'
         return df
 #check to see if two entries are similar enough to merge
-    def is_it_similar_enough(self):
-        pass
+
 
     def df_to_xlsx(self, string):
         string = string + '.xlsx'

@@ -8,6 +8,9 @@ from AcmeData.Dataset import Dataset
 
 # Tests for our Dataset class
 class TestDataset(unittest.TestCase):
+    pd.set_option('display.max_rows', 500)
+    pd.set_option('display.max_columns', 500)
+    pd.set_option('display.width', 1000)
 
     # set up instances for our testing
     def setUp(self):
@@ -55,31 +58,11 @@ class TestDataset(unittest.TestCase):
 
         self.assertEqual('123456789_flagged_for_inspection', self.orgs.df.iloc[4,1])
 
-    def remove_non_ascii_symbols_during_cleaning(self):
-        pass
-
-    def test_deal_with_similar_emails(self):
-
-        df = self.users.merge_similar_entries()
-        df = self.users.pick_a_merged_subscription(df)
-        df = self.users.pick_a_merged_role(df)
-
-        not_flagged = df.loc[df['tags'] != 'email_flagged']['email']
 
 
-        for email in not_flagged:
-            rows_we_need_to_update = self.users.result.loc[self.users.result['email'] == email]
-            ids_to_delete = rows_we_need_to_update['id']
-            print(ids_to_delete.to_list())
-            #TODO: Deal with orgid, and emp id -taking a break from this to reupload orgs
-            print(rows_we_need_to_update.columns)
+    def test_deal_with_identical_emails(self):
+        self.users.dealing_with_identical_emails()
 
-
-
-
-
-    def test_merging_similar_entries(self):
-        result = pd.concat(g for _, g in self.users.df.groupby("email") if len(g) > 1)
 
     #flag_aparna() is called on instantiation - we are just checking that the tag is in place
     def test_flagged_as_aparna(self):
@@ -88,10 +71,6 @@ class TestDataset(unittest.TestCase):
     def test_merging_visitors(self):
         result = pd.concat(g for _, g in self.users.df.groupby("email") if len(g) > 1)
         pass
-
-
-    def test_merge_similar_entries(self):
-        df = self.users.merge_similar_entries()
 
 
     #this test is not completely air tight but will work in the case of this one data set clean -- needs to be a bit more
@@ -108,11 +87,12 @@ class TestDataset(unittest.TestCase):
         pass
 
     def test_dealing_with_identical_emails(self):
-        df = self.users.merge_similar_entries()
-        df = self.users.pick_a_merged_role(df)
-        #print(df)
+        df = self.users.dealing_with_identical_emails()
+        df.to_csv('testing_merge.csv')
+        #looking_for_alice = self.users.df.loc[self.users.df['name'] == 'Alice']
+        #print(looking_for_alice)
 
-    def test_pass_to_visitors(self):
+    def pass_to_visitors(self):
         pass
 
 
