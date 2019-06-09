@@ -1,6 +1,6 @@
 import math
 import unittest
-
+import numpy as np
 import pandas as pd
 
 from AcmeData.Dataset import Dataset
@@ -64,79 +64,34 @@ class TestDataset(unittest.TestCase):
 
     def test_merging_similar_entries(self):
         result = pd.concat(g for _, g in self.users.df.groupby("email") if len(g) > 1)
-        #print(result['name'] + result['email'])
-        find_this = result['email'].iloc[0]
-
-        similar_entries = self.users.df.loc[self.users.df['email'] == find_this ]
-        #print(similar_entries)
-        #print(self.orgs.df)
-
-            #if result[result['email'] == find_this_val]:
-                #print('gotit')
-            #print(match)
-    # replace our dataframe within our instance with a new dataframe
 
     #flag_aparna() is called on instantiation - we are just checking that the tag is in place
     def test_flagged_as_aparna(self):
         self.assertEqual(self.users.df['tags'][0], 'aparna')
 
-    def test_tags_are_stored_as_arrays(self):
-        testing = self.orgs.df['tags'][10]
-
-    def that_if_the_first_tag_value_is_null_it_is_removed(self):
-        list_of_tags = self.orgs.df['tags']
-        count = 0
-        for tag in list_of_tags:
-            if tag[0] == '':
-                tags = tag.pop(0)
-                count = count + 1
-            #print(index)
-        pass
-
     def test_merging_visitors(self):
         result = pd.concat(g for _, g in self.users.df.groupby("email") if len(g) > 1)
 
 
-    def test_is_it_similar_enough(self):
-        result = pd.concat(g for _, g in self.users.df.groupby("email") if len(g) > 1)
-        result_emails = list(set(self.users.df['email']))
-        similar_entries = []
-        for email in result_emails:
-            result_for_this_email = result.loc[result['email'] == email]
-            df = result.groupby('email').agg({'email': 'first',
-                                          'name': ', '.join,
-                                          'role': ', '.join,
-                                          'active': 'first',
-                                          'api_subscription': ', '.join,
-                                          'promotion_code': ', '.join,
-                                          'role': ', '.join,
-                                          'organization_id': ', '.join,
-                                              'tags': 'first'
-                                              }).reset_index(drop=True)
+    def test_merge_similar_entries(self):
+        df = self.users.merge_similar_entries()
 
-        for i, row in df.iterrows():
-            names = row['name'].split(',')
-            same_names = all(elem.strip() == names[0] for elem in names)
-
-            if same_names:
-                df.loc[df['name'] == row['name'], 'name'] = names[0]
-
-            else:
-                similar_entries.append(df)
-                df.loc[df['name'] == row['name'], 'tags'] = 'flagged'
-        df = df.fillna('flagged')
-        #df.type
-        #print(df['tags'])
-        print(df)
-
-        def test_picking_merge_features():
-            #pick a role
-
-            #pick a subscription
-            pass
-
-    def test_remove_duplicates(self):
+    #this test is not completely air tight but will work in the case of this one data set clean -- needs to be a bit more
+    #airtight in the way assertion statements are picked
+    def test_pick_a_merged_subscription(self):
+        df = self.users.merge_similar_entries()
+        df = self.users.pick_a_merged_subscription(df)
         pass
+    #see note above
+    def test_pick_a_merged_role(self):
+        df = self.users.merge_similar_entries()
+        df = self.users.pick_a_merged_role(df)
+        print(df['role'])
+        pass
+
+    def test_pass_to_visitors(self):
+        pass
+
 
     def test_replace_dataframe(self):
         set = Dataset('organizations.csv')

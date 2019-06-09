@@ -23,13 +23,14 @@ class Dataset(object):
 
 #clean our data of non-ascii characters. If our column is called 'name', take out the '- CE' it shouldn't be here
     def clean_data(self):
-        self.df = self.df.replace('_', 'underscore', regex=True)
+
         self.df = self.df.fillna('')
 
         if 'domain_names' in self.df.columns:
             #there is definitely a better way to do this -- come back here if you think of it - write this into commit
             self.df['domain_names'] = self.df['domain_names'].str.replace("['[()]", "").values
             self.df['domain_names'] = self.df['domain_names'].str.replace("[]]", "").values
+            self.df['domain_names'] = self.df['domain_names'].replace('_', 'underscore', regex=True)
 
         if 'name' in self.df.columns:
             names = self.df['name']
@@ -40,8 +41,9 @@ class Dataset(object):
                 val = str(val) + '_flagged_for_inspection'
                 self.df.iloc[ind, 1] = val
 
-            #self.df['name'] = self.df['name'].str.replace('[^\w\#@/:%.,_-]', '')
             self.df['name'] = self.df['name'].str.replace('[^\w\s#@/:%.,_-]', '')
+            #self.df['name'] = self.df['name'].replace('_', 'underscore', regex=True)
+
 
     def add_aparna(self):
         tags = self.df['tags']
@@ -81,7 +83,62 @@ class Dataset(object):
 #if entries are the same through name, email, and organization, and group, merge them
     def merge_similar_entries(self):
         result = pd.concat(g for _, g in self.df.groupby("email") if len(g) > 1)
+        result_emails = list(set(self.df['email']))
+        similar_entries = []
+        for email in result_emails:
+            result_for_this_email = result.loc[result['email'] == email]
+            df = result.groupby('email').agg({'email': 'first',
+                                              'name': ', '.join,
+                                              'role': ', '.join,
+                                              'active': 'first',
+                                              'api_subscription': ', '.join,
+                                              'promotion_code': ', '.join,
+                                              'role': ', '.join,
+                                              'organization_id': ', '.join,
+                                              'tags': 'first'
+                                              }).reset_index(drop=True)
 
+        for i, row in df.iterrows():
+            names = row['name'].split(',')
+            same_names = all(elem.strip() == names[0] for elem in names)
+
+            if same_names:
+                df.loc[df['name'] == row['name'], 'name'] = names[0]
+
+            else:
+                similar_entries.append(df)
+                df.loc[df['name'] == row['name'], 'tags'] = 'flagged'
+        df = df.fillna('flagged')
+        df['email'].replace('', np.nan, inplace=True)
+        df.dropna(subset=['email'], inplace=True)
+        return df
+
+    def pick_a_merged_subscription(self, df):
+        for i, row in df.iterrows():
+           if row['tags'] != 'flagged':
+               subscription = row['api_subscription']
+               if 'gold' in subscription:
+                   df.loc[df['name'] == row['name'], 'api_subscription'] = 'plan_gold'
+
+               elif 'silver' in subscription:
+                   df.loc[df['name'] == row['name'], 'api_subscription'] = 'plan_silver'
+
+               else:
+                   df.loc[df['name'] == row['name'], 'api_subscription'] = 'plan_bronze'
+        return df
+    def pick_a_merged_role(self,df):
+        for i, row in df.iterrows():
+           if row['tags'] != 'flagged':
+               roles = row['role']
+               if 'admin' in roles:
+                   df.loc[df['name'] == row['name'], 'role'] = 'admin'
+
+               elif 'agent' in roles:
+                   df.loc[df['name'] == row['name'], 'role'] = 'agent'
+
+               else:
+                   df.loc[df['name'] == row['name'], 'role'] = 'end_user'
+        return df
 #check to see if two entries are similar enough to merge
     def is_it_similar_enough(self):
         pass
