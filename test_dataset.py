@@ -58,9 +58,25 @@ class TestDataset(unittest.TestCase):
     def remove_non_ascii_symbols_during_cleaning(self):
         pass
 
-    def test_find_similar_emails(self):
-        result = pd.concat(g for _, g in self.users.df.groupby("email") if len(g) > 1)
-        pass
+    def test_deal_with_similar_emails(self):
+
+        df = self.users.merge_similar_entries()
+        df = self.users.pick_a_merged_subscription(df)
+        df = self.users.pick_a_merged_role(df)
+
+        not_flagged = df.loc[df['tags'] != 'email_flagged']['email']
+
+
+        for email in not_flagged:
+            rows_we_need_to_update = self.users.result.loc[self.users.result['email'] == email]
+            ids_to_delete = rows_we_need_to_update['id']
+            print(ids_to_delete.to_list())
+            #TODO: Deal with orgid, and emp id -taking a break from this to reupload orgs
+            print(rows_we_need_to_update.columns)
+
+
+
+
 
     def test_merging_similar_entries(self):
         result = pd.concat(g for _, g in self.users.df.groupby("email") if len(g) > 1)
@@ -71,10 +87,12 @@ class TestDataset(unittest.TestCase):
 
     def test_merging_visitors(self):
         result = pd.concat(g for _, g in self.users.df.groupby("email") if len(g) > 1)
+        pass
 
 
     def test_merge_similar_entries(self):
         df = self.users.merge_similar_entries()
+
 
     #this test is not completely air tight but will work in the case of this one data set clean -- needs to be a bit more
     #airtight in the way assertion statements are picked
@@ -86,8 +104,13 @@ class TestDataset(unittest.TestCase):
     def test_pick_a_merged_role(self):
         df = self.users.merge_similar_entries()
         df = self.users.pick_a_merged_role(df)
-        print(df['role'])
+        #print(df['tags'])
         pass
+
+    def test_dealing_with_identical_emails(self):
+        df = self.users.merge_similar_entries()
+        df = self.users.pick_a_merged_role(df)
+        #print(df)
 
     def test_pass_to_visitors(self):
         pass

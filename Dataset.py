@@ -80,14 +80,19 @@ class Dataset(object):
     def delete_identical_entries(self):
         self.df = self.df.drop_duplicates(subset=['name','email'])
 
+    def dealing_with_identical_emails(self):
+        df = self.users.merge_similar_entries()
+        df = self.users.pick_a_merged_role(df)
+        pass
+
 #if entries are the same through name, email, and organization, and group, merge them
     def merge_similar_entries(self):
-        result = pd.concat(g for _, g in self.df.groupby("email") if len(g) > 1)
+        self.result = pd.concat(g for _, g in self.df.groupby("email") if len(g) > 1)
         result_emails = list(set(self.df['email']))
         similar_entries = []
         for email in result_emails:
-            result_for_this_email = result.loc[result['email'] == email]
-            df = result.groupby('email').agg({'email': 'first',
+            result_for_this_email = self.result.loc[self.result['email'] == email]
+            df = self.result.groupby('email').agg({'email': 'first',
                                               'name': ', '.join,
                                               'role': ', '.join,
                                               'active': 'first',
@@ -107,8 +112,8 @@ class Dataset(object):
 
             else:
                 similar_entries.append(df)
-                df.loc[df['name'] == row['name'], 'tags'] = 'flagged'
-        df = df.fillna('flagged')
+                df.loc[df['name'] == row['name'], 'tags'] = 'email_flagged'
+        df = df.fillna('email_flagged')
         df['email'].replace('', np.nan, inplace=True)
         df.dropna(subset=['email'], inplace=True)
         return df
