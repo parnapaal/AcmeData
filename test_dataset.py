@@ -110,7 +110,8 @@ class TestDataset(unittest.TestCase):
                                           'api_subscription': ', '.join,
                                           'promotion_code': ', '.join,
                                           'role': ', '.join,
-                                          'organization_id': ', '.join
+                                          'organization_id': ', '.join,
+                                              'tags': 'first'
                                               }).reset_index(drop=True)
 
         for i, row in df.iterrows():
@@ -120,7 +121,13 @@ class TestDataset(unittest.TestCase):
             if same_names:
                 df.loc[df['name'] == row['name'], 'name'] = names[0]
 
-            similar_entries.append(df)
+            else:
+                similar_entries.append(df)
+                df.loc[df['name'] == row['name'], 'tags'] = 'flagged'
+        df = df.fillna('flagged')
+        #df.type
+        #print(df['tags'])
+        print(df)
 
         def test_picking_merge_features():
             #pick a role
@@ -128,6 +135,8 @@ class TestDataset(unittest.TestCase):
             #pick a subscription
             pass
 
+    def test_remove_duplicates(self):
+        pass
 
     def test_replace_dataframe(self):
         set = Dataset('organizations.csv')
