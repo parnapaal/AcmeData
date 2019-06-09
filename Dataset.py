@@ -15,8 +15,8 @@ class Dataset(object):
         self.fileName = fileName
         try:
             self.df = pd.read_csv(fileName)
-            self.add_aparna()
             self.clean_data()
+            self.add_aparna()
         except FileNotFoundError:
             print('Wrong file or file path!')
             self.df = ""
@@ -45,9 +45,29 @@ class Dataset(object):
             self.df['name'] = self.df['name'].str.replace('[^\w\s#@/:%.,_-]', '')
 
     def add_aparna(self):
-        pass
+        tags = self.df['tags']
+        newtags = []
+        for tag in tags:
+            try:
+                if tag == '[]':
+                    tag = "'aparna'"
 
-#return our self.dataframe
+                else:
+                    tag = tag.replace(']', ", 'aparna'")
+
+            except:
+                print('something is wrong')
+
+            tag = tag.replace('underscore', '_')
+            tag = tag.replace("'", '')
+            tag = tag.replace('[', '')
+
+            newtags.append(tag)
+
+        self.df = self.df.drop("tags", axis=1)
+        self.df['tags'] = newtags
+
+    #return our self.dataframe
     def get_dataframe(self):
        return self.df
 

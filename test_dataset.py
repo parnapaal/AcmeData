@@ -75,21 +75,10 @@ class TestDataset(unittest.TestCase):
                 #print('gotit')
             #print(match)
     # replace our dataframe within our instance with a new dataframe
-    #
+    
+    #flag_aparna() is called on instantiation - we are just checking that the tag is in place
     def test_flagged_as_aparna(self):
-        tags = self.users.df['tags']
-
-        for tag in tags:
-            try:
-                if tag == '[]':
-                    tag = "'aparna'"
-
-                else:
-                    tag = tag.replace(']', ",'aparna'")
-                    tag = tag.replace('[', '')
-            except:
-                print('something is wrong')
-            print(tag)
+        self.assertEqual(self.users.df['tags'][0], 'aparna')
 
     def test_tags_are_stored_as_arrays(self):
         testing = self.orgs.df['tags'][10]
