@@ -1,4 +1,6 @@
 import json
+import os
+
 import xlrd
 import requests
 
@@ -10,7 +12,11 @@ url = 'https://z3nplatformdevap.zendesk.com/api/v2/users/create_many.json'
 
 payloads = []
 users_dict = {'users': []}
-book = xlrd.open_workbook('scripts/users_list.xlsx')
+
+__location__ = os.path.realpath(
+    os.path.join(os.getcwd(), os.path.dirname(__file__)))
+
+book = xlrd.open_workbook(os.path.join(__location__, 'users_list.xlsx'))
 sheet = book.sheet_by_name('Sheet1')
 
 for row in range(1, sheet.nrows):
@@ -19,20 +25,20 @@ for row in range(1, sheet.nrows):
             {
                 'name': sheet.row_values(row)[2],
                 'email': sheet.row_values(row)[3],
-                #'organization_id':'',
-                #'role':'',
-                #'tags':[],
+                'organization_id':int(sheet.row_values(row)[12]),
+                'role':sheet.row_values(row)[4],
+                'tags':sheet.row_values(row)[11],
                 #'shared':'',
                 #'shared_agent':'',
                 #'details':'',
-               # 'notes':'',
+               #'notes':sheet.row_values(row)[5],
                # 'restricted_agent':'',
-               # 'user_fields': {
-                #    'employee_id':'',
-                 #   'promotion_code':'',
-                  #  'subscription':'',
-                   # 'acme_id': ''
-               # }
+                'user_fields': {
+                    'employee_id': sheet.row_values(row)[9],
+                    'promotion_code': sheet.row_values(row)[10],
+                    'subscription':sheet.row_values(row)[8],
+                    'acme_id': int(sheet.row_values(row)[1])
+                }
             }
         )
 
