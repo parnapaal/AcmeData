@@ -11,7 +11,7 @@ session.headers = {'Content-Type': 'application/json'}
 session.auth = 'aparna.pal.1994@gmail.com', 'Ferrar1_'
 url = 'https://z3nplatformdevap.zendesk.com/api/v2/organizations.json'
 user = 'aparna.pal.1994@gmail.com'
-pwd = 'Ferrar1_'
+pwd = ''
 headers = {'content-type': 'application/json'}
 
 payloads = []

@@ -393,11 +393,4 @@
 389,371052187434,Visitor 56987079,,15976972828,end-user,True,,,plan_silver,,exercitationemessesed,aparna
 390,371053068514,Chloe Customer,,10838980228,end-user,True,,,plan_gold,,molestiasexpeditadeleniti,aparna
 391,371119123594,james,james@example.com,10778648407,end-user,True,,,plan_bronze,,totamdolorsequi,aparna
-392,365198160868,"1    Alice
-Name: name, dtype: object","1    alice@example.com
-Name: email, dtype: object","1    2371912888, ['10838835388', '10838808228', '36...
-Name: organization_id, dtype: object","1    end_user
-Name: role, dtype: object","1    True
-Name: active, dtype: bool","[', , ']",,"1    plan_gold
-Name: api_subscription, dtype: object",[''],"1    nihilcommodiaccusantium, ipsumasperioresfugiat
-Name: promotion_code, dtype: object","['aparna, aparna, aparna']"
+392,365198160868,Alice,alice@example.com,"2371912888, ['10838835388', '10838808228', '360039599413']",end_user,True,"[', , ']",,plan_gold,[''],"nihilcommodiaccusantium, ipsumasperioresfugiat","['aparna, aparna, aparna, 365198160868 365198237628']"

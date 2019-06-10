@@ -68,17 +68,20 @@ class Dataset(object):
         self.df = self.df.drop("tags", axis=1)
         self.df['tags'] = newtags
 
+
     #return our self.dataframe
     def get_dataframe(self):
        return self.df
+
 
 #replace our dataframe with another
     def replace_dataframe(self, dataframe):
         self.df = dataframe
 
+
 #if entries are the exact same, delete one
-    def delete_identical_entries(self):
-        self.df = self.df.drop_duplicates(subset=['name','email'])
+    #def delete_identical_entries(self):
+        #self.df = self.df.drop_duplicates(subset=['name','email'])
 
     def dealing_with_identical_emails(self):
         df = self.merge_similar_entries()
@@ -104,15 +107,27 @@ class Dataset(object):
                 self.df = self.df[self.df['id'] != ids]
 
             emp_id = rows_we_need_to_update.loc[rows_we_need_to_update['id'] == ids]['employee_id'].values
-            look_here = df.loc[df['email'] == email]
-            print(look_here)
 
-            toadd = {'id': ids_to_delete[0], 'name': look_here['name'], 'email': look_here['email'],
-                     'organization_id': look_here['organization_id'], 'role': look_here['role'],
-                     'active': look_here['active'],
+            look_here = df.loc[df['email'] == email]
+
+            all_ids = ids_to_delete
+            all_ids = ' '.join(map(str, all_ids))
+
+            name = look_here['name'].values
+            email = look_here['email'].values
+            org_id = look_here['organization_id'].values
+            role = look_here['role'].values
+            active = look_here['active'].values
+            api_subscription = look_here['api_subscription'].values
+            promotion_code = look_here['promotion_code'].values
+
+            toadd = {'id': ids_to_delete[0], 'name': ' '.join(map(str, name)), 'email': ' '.join(map(str, email)),
+                     'organization_id': ' '.join(map(str, org_id)), 'role':' '.join(map(str, role)),
+                     'active':' '.join(map(str, active)),
                      'notes': notes_to_add,
-                     'api_subscription': df.loc[df['email'] == email]['api_subscription'], 'employee_id': emp_id,
-                     'promotion_code': look_here['promotion_code'], 'tags': tags_to_add + look_here['tags'].values}
+                     'api_subscription': ' '.join(map(str, api_subscription)), 'employee_id': emp_id,
+                     'promotion_code': ' '.join(map(str, promotion_code)), 'tags': tags_to_add + look_here['tags'].values +
+                                                                                   ', ' + all_ids}
 
             self.df = self.df.append(toadd, ignore_index=True)
             return self.df
